@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 import tailwind from 'eslint-plugin-tailwindcss'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettierConfig from 'eslint-config-prettier'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -29,14 +30,20 @@ const eslintConfig = defineConfig([
   // `configs.recommended` (the v3 `configs['flat/recommended']` array is gone)
   tailwind.configs.recommended,
   {
-    // Match the file globs eslint-config-next registers its plugins for, so the
-    // rule overrides below never apply to a file where a plugin is missing
+    // Match the file globs eslint-config-next registers its plugins (eg.
+    // jsx-a11y) for, so the rule overrides below never apply to a file where
+    // the plugin itself is missing
     files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
     // The tailwindcss recommended config above only registers the plugin for
     // its own `files` globs; re-register it here (same instance, so this is
     // allowed) to cover every file this object applies to
     plugins: {
       tailwindcss: tailwind
+    },
+    languageOptions: {
+      parserOptions: {
+        ...jsxA11y.flatConfigs.recommended.languageOptions?.parserOptions
+      }
     },
     settings: {
       // eslint-plugin-tailwindcss v4 resolves the theme from the Tailwind v4
@@ -46,6 +53,7 @@ const eslintConfig = defineConfig([
       }
     },
     rules: {
+      ...jsxA11y.flatConfigs.recommended.rules,
       camelcase: 'off',
       radix: 'warn',
       'no-console': 'off',
