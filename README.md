@@ -76,21 +76,21 @@ in two layers (see [`src/lib/bing.ts`](src/lib/bing.ts) and
 ## Getting started
 
 ```bash
-yarn install
-yarn dev            # http://localhost:3000
+npm ci
+npm run dev         # http://localhost:3000
 ```
 
 ### Scripts
 
 | Script                        | Description                             |
 | ----------------------------- | --------------------------------------- |
-| `yarn dev`                    | Start the dev server                    |
-| `yarn build` / `yarn start`   | Production build / serve                |
-| `yarn type-check`             | `tsc --noEmit`                          |
-| `yarn lint`                   | ESLint                                  |
-| `yarn format`                 | Prettier write                          |
-| `yarn vendor-components:list` | List tracked vendored UI components     |
-| `yarn vendor-components:sync` | Re-pull vendored components from shadcn |
+| `npm run dev`                    | Start the dev server                    |
+| `npm run build` / `npm run start`   | Production build / serve                |
+| `npm run type-check`             | `tsc --noEmit`                          |
+| `npm run lint`                   | ESLint                                  |
+| `npm run format`                 | Prettier write                          |
+| `npm run vendor-components:list` | List tracked vendored UI components     |
+| `npm run vendor-components:sync` | Re-pull vendored components from shadcn |
 
 ## Environment
 

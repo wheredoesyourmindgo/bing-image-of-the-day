@@ -22,32 +22,44 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/react": "19.2.17",
+    "@types/react": "19.2.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.2.11",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-tailwindcss": "^4.2.0",
     "prettier": "^3.9.6",
+    "rimraf": "^6.1.3",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vercel": "^56.4.1"
+    "vercel": "^59.23.2"
   },
   "scripts": {
+    "preinstall": "npx --yes --loglevel=error only-allow npm",
     "start": "next start",
     "build": "next build",
     "dev": "next dev",
+    "vc": "vc",
+    "vc:prod": "vc --prod",
+    "dev:vercel": "vc dev",
     "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch",
+    "type-check:watch": "npm run type-check -- --watch",
     "format": "prettier --write .",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "vendor-components": "node scripts/vendor-components.mjs",
     "vendor-components:list": "node scripts/vendor-components.mjs list",
     "vendor-components:discover": "node scripts/vendor-components.mjs discover",
-    "vendor-components:sync": "node scripts/vendor-components.mjs sync"
+    "vendor-components:sync": "node scripts/vendor-components.mjs sync",
+    "clean": "rimraf node_modules .next .vercel/cache",
+    "reinstall": "npm run clean && npm ci",
+    "audit": "npm audit --omit=dev --audit-level=high",
+    "verify": "npm run type-check && npm run lint && npm run build && npm run audit",
+    "deps:check": "npm outdated || true",
+    "deps:upgrade": "npx --yes npm-check-updates --interactive --format group --target minor",
+    "deps:upgrade:major": "npx --yes npm-check-updates --interactive --format group --target latest"
   },
-  "packageManager": "yarn@4.17.1",
-  "resolutions": {
+  "overrides": {
     "@types/react": "19.2.2"
   }
 }
