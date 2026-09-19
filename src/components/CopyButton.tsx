@@ -12,7 +12,7 @@ function CopyButton({className, onCopiedChange, ...props}: CopyButtonProps) {
   return (
     <BaseCopyButton
       className={cn(
-        'duration-[250ms]',
+        'duration-250',
         copied && 'text-green-600 hover:text-green-600',
         className
       )}

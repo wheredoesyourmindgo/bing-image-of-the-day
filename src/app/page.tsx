@@ -23,7 +23,7 @@ export default async function Home({searchParams}: HomeProps) {
   return (
     // `[container-type:size]` makes the frame a size container so Chico can size
     // himself in `cqmin` (percent of the shorter side).
-    <main className="[container-type:size] relative h-screen w-screen">
+    <main className="@container-size relative h-screen w-screen">
       <Image
         fill
         priority

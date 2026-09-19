@@ -597,7 +597,7 @@ function PreviewPane({
 } & PlaygroundProps) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="[container-type:size] relative aspect-video w-full overflow-hidden rounded-lg border">
+      <div className="@container-size relative aspect-video w-full overflow-hidden rounded-lg border">
         <Image
           fill
           quality={75}
@@ -749,7 +749,7 @@ function FullScreenPreview({
       </Button>
 
       {open && (
-        <div className="animate-in fade-in [container-type:size] fixed inset-0 z-50 bg-black duration-300">
+        <div className="animate-in fade-in @container-size fixed inset-0 z-50 bg-black duration-300">
           <Image
             fill
             priority
