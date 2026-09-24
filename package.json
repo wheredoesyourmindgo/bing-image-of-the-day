@@ -4,6 +4,9 @@
   "private": true,
   "author": "wheredoesyourmindgo <moemanchu@icloud.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
     "@base-ui/react": "^1.6.0",
