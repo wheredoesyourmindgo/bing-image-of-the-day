@@ -5,7 +5,7 @@
   "author": "wheredoesyourmindgo <moemanchu@icloud.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
