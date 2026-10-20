@@ -1,0 +1,13 @@
+# Spelling dictionary for bing-image-of-the-day.
+# One word per line; '#' starts a comment.
+# The VS Code cSpell 'add to dictionary' quick-fix appends here.
+
+configurator
+copyrightlink
+cqmin
+nums
+shadcn
+tblrxy
+unlayered
+wheredoesyourmindgo
+worktrees
