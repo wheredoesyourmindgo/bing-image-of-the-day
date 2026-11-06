@@ -1,6 +1,25 @@
 #!/usr/bin/env node
 
-import {readFileSync, existsSync} from 'node:fs'
+/**
+ * Re-fetches the files this app vendors rather than authors, from the manifest
+ * in vendor-components.json.
+ *
+ * shadcn components are copied into the repo by design, which makes them
+ * indistinguishable from hand-written code once committed. The manifest records
+ * which files came from where so they can be refreshed in place, and so
+ * `discover` can flag a vendored file nobody wrote down.
+ *
+ *   npm run vendor-components list
+ *   npm run vendor-components sync
+ *   npm run vendor-components sync -- button dialog
+ *   npm run vendor-components discover
+ *
+ * Vendored files stay in the CLI's own formatting -- .prettierignore and the
+ * ESLint ignores both skip them -- so that `shadcn diff` compares against
+ * upstream without style noise.
+ */
+
+import {readFileSync, existsSync, readdirSync, statSync} from 'node:fs'
 import path from 'node:path'
 import {spawnSync} from 'node:child_process'
 
@@ -11,7 +30,8 @@ const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
 const SOURCE_DIRS = {
   shadcn: path.join('src', 'components', 'ui'),
   'animate-ui': path.join('src', 'components', 'animate-ui'),
-  'motion-primitives': path.join('src', 'components', 'ui')
+  'motion-primitives': path.join('src', 'components', 'ui'),
+  reui: path.join('src', 'components', 'reui')
 }
 
 const MOTION_PRIMITIVES_FILES = new Set(['disclosure.tsx', 'in-view.tsx'])
@@ -31,7 +51,8 @@ Options:
 Sources:
   shadcn
   animate-ui
-  motion-primitives`)
+  motion-primitives
+  reui`)
 }
 
 function componentStatus(component) {
@@ -86,6 +107,28 @@ function listComponents() {
   }
 }
 
+/**
+ * Every file under a directory. Walked here rather than shelled out to `rg`,
+ * which is not installed everywhere -- and a missing binary would otherwise
+ * read as "found nothing untracked", the same output as a clean tree.
+ */
+function collectFiles(dir) {
+  const files = []
+
+  const walk = (current) => {
+    if (!existsSync(current)) return
+    for (const entry of readdirSync(current)) {
+      if (entry === 'node_modules' || entry.startsWith('.')) continue
+      const full = path.join(current, entry)
+      if (statSync(full).isDirectory()) walk(full)
+      else files.push(full)
+    }
+  }
+
+  walk(dir)
+  return files
+}
+
 function discoverComponents() {
   const trackedPaths = new Map()
   for (const component of manifest.components) {
@@ -99,17 +142,7 @@ function discoverComponents() {
   const findings = []
 
   for (const [source, relativeDir] of Object.entries(SOURCE_DIRS)) {
-    const dir = path.join(cwd, relativeDir)
-    const result = spawnSync('rg', ['--files', dir], {
-      cwd,
-      encoding: 'utf8'
-    })
-
-    if (result.status !== 0) {
-      continue
-    }
-
-    for (const absPath of result.stdout.split('\n').filter(Boolean)) {
+    for (const absPath of collectFiles(path.join(cwd, relativeDir))) {
       const relPath = path.relative(cwd, absPath)
 
       if (
@@ -132,6 +165,11 @@ function discoverComponents() {
         trackedBy: trackedPaths.get(relPath) ?? []
       })
     }
+  }
+
+  if (findings.length === 0) {
+    console.log('No vendored files found under any source directory.')
+    return
   }
 
   for (const finding of findings.sort((a, b) => a.path.localeCompare(b.path))) {
