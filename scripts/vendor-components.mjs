@@ -174,30 +174,6 @@ function syncComponents(selectors, source, options) {
       process.exitCode = result.status ?? 1
       return
     }
-
-    if (!options.dryRun) {
-      const filesToFormat = component.paths.filter((file) =>
-        existsSync(path.join(cwd, file))
-      )
-
-      if (filesToFormat.length > 0) {
-        console.log(`Formatting ${component.source}:${component.name}`)
-        const prettierResult = spawnSync(
-          'npx',
-          ['prettier', '--write', ...filesToFormat],
-          {
-            cwd,
-            stdio: 'inherit',
-            encoding: 'utf8'
-          }
-        )
-
-        if (prettierResult.status !== 0) {
-          process.exitCode = prettierResult.status ?? 1
-          return
-        }
-      }
-    }
   }
 }
 
