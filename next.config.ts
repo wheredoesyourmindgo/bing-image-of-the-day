@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
     fetches: {
       fullUrl: true
     }
+  },
+  turbopack: {
+    rules: {
+      // Tailwind's Turbopack loader, in place of PostCSS.
+      '*.css': {loaders: ['@tailwindcss/turbopack']}
+    }
   }
 }
 

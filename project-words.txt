@@ -8,6 +8,7 @@ cqmin
 nums
 shadcn
 tblrxy
+turbopack
 unlayered
 wheredoesyourmindgo
 worktrees
